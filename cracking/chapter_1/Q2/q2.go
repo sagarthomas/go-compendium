@@ -2,7 +2,6 @@
 Check Permutation:  Given two strings, write a method to decide if one string
 is a permutation of another.
 */
-
 package main
 
 import "fmt"
@@ -11,7 +10,7 @@ func main() {
 	fmt.Println(isPermutation("ABCD", "DBAC"))  // yes
 	fmt.Println(isPermutation("top", "pop"))    // no
 	fmt.Println(isPermutation("chart", "dart")) // no
-	fmt.Println(isPermutation("tool", "loot"))  // no
+	fmt.Println(isPermutation("tool", "loot"))  // yes
 
 }
 
