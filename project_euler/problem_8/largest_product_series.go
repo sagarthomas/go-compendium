@@ -9,11 +9,15 @@ Find the thirteen adjacent digits in the 1000-digit number that have the greates
 package main
 
 import (
+	"fmt"
 	"strconv"
 	"sync"
+	"time"
 )
 
+// Solution utilizing goroutines to check every combination of 13 digits in a short period of time. < 1s
 func main() {
+	start := time.Now()
 	input := `73167176531330624919225119674426574742355349194934
 	96983520312774506326239578318016984801869478851843
 	85861560789112949495459501737958331952853208805511
@@ -39,28 +43,35 @@ func main() {
 	for _, i := range input {
 		v, err := strconv.Atoi(string(i))
 		if err == nil {
-			//fmt.Printf("%q does not look like a number.\n", i)
 			digits = append(digits, v)
 		}
 	}
 
-	//offset := 0
-	products := make(chan int)
+	products := make(chan int, len(digits)-13) // create a buffered channel to accept answers from 1000 - 13 = 87 goroutines
 	var wg sync.WaitGroup
 	for i := 0; i < len(digits)-13; i++ {
+		// Spawn a goroutine with a slice of 13 consecutive digits and increment the wait counter
 		wg.Add(1)
 		go calculateProduct(digits[i:i+13], &wg, products)
 	}
 
+	wg.Wait() // wait for all the gorutines to complete
+	close(products)
+	largest := 0
 	for m := range products {
-
+		if m > largest {
+			largest = m
+		}
 	}
+	fmt.Println(largest)
+	fmt.Printf("in %vs\n", time.Since(start).Seconds())
 }
 
-func calculateProduct(list []int, wg *sync.WaitGroup, p chan int) int {
+func calculateProduct(list []int, wg *sync.WaitGroup, p chan int) {
+	defer wg.Done()
 	product := 1
 	for _, v := range list {
 		product = product * v
 	}
-	return product
+	p <- product
 }
