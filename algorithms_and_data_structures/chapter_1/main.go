@@ -5,7 +5,8 @@ package main
 import "fmt"
 
 func main() {
-	queueTest()
+	//queueTest()
+	bagTest()
 }
 
 func stackTest() {
@@ -29,4 +30,20 @@ func queueTest() {
 	fmt.Println(q.Dequeue()) // should be 1
 	q.Dequeue()
 	fmt.Println(q.IsEmpty()) //true
+}
+
+func bagTest() {
+	b := Bag{}
+
+	fmt.Printf("Empty: %v\n", b.IsEmpty())
+	fmt.Printf("Size: %d\n", b.Size())
+	b.Add(1)
+	b.Add(2)
+	b.Add(3)
+	for r := range b.Iter() {
+		fmt.Println(r)
+	}
+	fmt.Printf("Size: %d\n", b.Size())
+	fmt.Printf("Empty: %v\n", b.IsEmpty())
+
 }
