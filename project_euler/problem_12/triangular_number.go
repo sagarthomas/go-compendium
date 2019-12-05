@@ -29,7 +29,8 @@ import (
 /*
 Two main optimizations made:
 1. Instead of calculating the ith triangular number each time by summing from 1 -> i, we can just
-use the answer from 1 - i and add i to it
+use the answer from i - 1 and add i to it EDIT: no reason to use an array to store all the values since we don't use previous
+values anyway
 2. To find all the factors, instead of iterating from 1 -> n and doing trial division for each value,
 we can iterate up to sqrt(n); for each i that evenly divides n, we check if i == n/i. If it's not, then we iterate
 the factor count twice. Example: 28 % 2 = 0 and 28 / 2 = 14 which is another factor. This way, we
@@ -38,24 +39,16 @@ ex. 25 % 5 = 0 and 25 / 5 = 5 so here we would only iterate count by 1)
 */
 func main() {
 	start := time.Now()
-	triangular_numbers := make([]int, 1000) //arbitary array size to start off with
-	triangular_numbers[1] = 1
+	triangle_num := 1
 
 	i := 2
 	for {
-		triangular_numbers[i] = triangular_numbers[i-1] + i
-		if findFactors(triangular_numbers[i]) {
-			fmt.Println(triangular_numbers[i])
-			fmt.Printf("in %vs\n", time.Since(start).Seconds())
+		triangle_num += i
+		if findFactors(triangle_num) {
+			fmt.Printf("%d in %vs\n", triangle_num, time.Since(start).Seconds())
 			return
 		}
 		i++
-		if i == cap(triangular_numbers) {
-			// grow the slice
-			temp := make([]int, len(triangular_numbers)*2, cap(triangular_numbers)*2)
-			copy(temp, triangular_numbers)
-			triangular_numbers = temp
-		}
 	}
 }
 
