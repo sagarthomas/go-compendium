@@ -6,7 +6,8 @@ import "fmt"
 
 func main() {
 	//queueTest()
-	bagTest()
+	//bagTest()
+	UFTest()
 }
 
 func stackTest() {
@@ -46,4 +47,21 @@ func bagTest() {
 	fmt.Printf("Size: %d\n", b.Size())
 	fmt.Printf("Empty: %v\n", b.IsEmpty())
 
+}
+
+func UFTest() {
+	uf := NewUF(10)
+	fmt.Printf("Number of components: %d\n", uf.Count())
+	uf.Union(3, 4)
+	fmt.Printf("%d is connected to root : %d\n", 4, uf.Find(4))
+	fmt.Println(uf.Connected(3, 4)) // true
+	uf.Union(4, 5)
+	fmt.Printf("%d is connected to root : %d\n", 3, uf.Find(3))
+	uf.Union(3, 9)
+	fmt.Println(uf.Connected(9, 5)) // true
+	for i := 0; i < 10; i++ {
+		fmt.Printf("%d is connected to root : %d\n", i, uf.Find(i))
+	}
+
+	fmt.Printf("Number of components: %d\n", uf.Count()) // 7
 }
